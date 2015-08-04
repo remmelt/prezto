@@ -10,7 +10,7 @@
 #
 
 # Set case-sensitivity for completion, history lookup, etc.
-# zstyle ':prezto:*:*' case-sensitive 'yes'
+zstyle ':prezto:*:*' case-sensitive 'yes'
 
 # Color output (auto set to 'no' on dumb terminals).
 zstyle ':prezto:*:*' color 'yes'
@@ -26,6 +26,12 @@ zstyle ':prezto:*:*' color 'yes'
 
 # Set the Prezto modules to load (browse modules).
 # The order matters.
+
+# environment must be first
+# fasd must be after completion
+# syntax-highlighting must be second to last
+# prompt must be last
+
 zstyle ':prezto:load' pmodule \
   'environment' \
   'terminal' \
@@ -33,9 +39,12 @@ zstyle ':prezto:load' pmodule \
   'history' \
   'directory' \
   'spectrum' \
-  'utility' \
   'completion' \
+  'fasd' \
+  'syntax-highlighting' \
   'prompt'
+
+zstyle ':prezto:module:history' HIST_VERIFY no
 
 #
 # Autosuggestions
@@ -113,7 +122,7 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'sorin'
+zstyle ':prezto:module:prompt' theme 'agnoster'
 
 # Set the working directory prompt display length.
 # By default, it is set to 'short'. Set it to 'long' (without '~' expansion)
@@ -155,23 +164,21 @@ zstyle ':prezto:module:prompt' theme 'sorin'
 # SSH
 #
 
+# Use ssh-add -K instead! Goes to keychain.
 # Set the SSH identities to load into the agent.
-# zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'id_rsa2' 'id_github'
+# zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'id_dsa' 'id_boot2docker'
 
 #
 # Syntax Highlighting
 #
 
+zstyle ':prezto:module:syntax-highlighting' color 'yes'
 # Set syntax highlighters.
 # By default, only the main highlighter is enabled.
-# zstyle ':prezto:module:syntax-highlighting' highlighters \
-#   'main' \
-#   'brackets' \
-#   'pattern' \
-#   'line' \
-#   'cursor' \
-#   'root'
-#
+zstyle ':prezto:module:syntax-highlighting' highlighters \
+   'main' \
+   'brackets'
+
 # Set syntax highlighting styles.
 # zstyle ':prezto:module:syntax-highlighting' styles \
 #   'builtin' 'bg=blue' \
