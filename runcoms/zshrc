@@ -16,8 +16,6 @@ export GOPATH=~/dev/go
 export PATH=~/bin:$GOPATH/bin:/opt/apache-maven/bin:/usr/local/bin:/opt/local/bin:/opt/local/sbin:$PATH:/usr/local/sbin:$GOROOT/bin
 export DEFAULT_USER=rpit
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 11)
-
 export LC_CTYPE="en_US.utf-8"
 
 # jq helper for service.log
@@ -58,7 +56,7 @@ alias vim='nvim'
 alias c='code .'
 alias z='fasd_cd'
 alias cat='ccat --bg=light'
-alias ls='ls -lAsGhF'
+alias ls='exa -a -a -l --git'
 alias grep='grep --color'
 alias hist='history -150'
 
@@ -73,12 +71,48 @@ alias nl='nomad logs -f'
 
 unsetopt histverify
 
-source ~/.zshrc_ebay
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 eval $(thefuck --alias fu)
 
-
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/nomad nomad
+
+# https://github.com/justjanne/powerline-go#zsh
+function powerline_precmd() {
+    PS1="$(${GOPATH}/bin/powerline-go -error $? -shell zsh -newline -modules user,load,ssh,cwd,perms,git,jobs,exit,root)"
+}
+
+function install_powerline_precmd() {
+  for s in "${precmd_functions[@]}"; do
+    if [ "$s" = "powerline_precmd" ]; then
+      return
+    fi
+  done
+  precmd_functions+=(powerline_precmd)
+}
+
+if [ "$TERM" != "linux" ]; then
+    install_powerline_precmd
+fi
+
+export PATH="/Users/rpit/.jenv/shims:${PATH}"
+export JENV_SHELL=zsh
+export JENV_LOADED=1
+unset JAVA_HOME
+source '/usr/local/Cellar/jenv/0.5.2/libexec/libexec/../completions/jenv.zsh'
+jenv rehash 2>/dev/null
+jenv() {
+  typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
