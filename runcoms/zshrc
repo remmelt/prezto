@@ -57,6 +57,7 @@ alias c='code .'
 alias z='fasd_cd'
 alias cat='ccat --bg=light'
 alias ls='exa -a -a -l --git'
+alias l='ls'
 alias grep='grep --color'
 alias hist='history -150'
 
